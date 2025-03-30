@@ -461,6 +461,10 @@
                 const option = document.createElement('option');
                 option.value = index;
                 option.textContent = `${item.cung} | ${item.lyGiai} | ${item.totXau}`;
+                if (item.totXau.includes('吉')) {
+                option.style.color = 'red';
+                option.style.fontWeight = 'bold';
+                }
                 cungSelect.appendChild(option);
             });
             
