@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng dụng Tra cứu Thước Lỗ Ban</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3498db;
+        }
+        .result {
+            margin-top: 30px;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .result-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .result-value {
+            color: #2c3e50;
+        }
+        .good {
+            color: #27ae60;
+        }
+        .bad {
+            color: #c0392b;
+        }
+        .highlight {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eef8ff;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .note {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ứng dụng Tra cứu Thước Lỗ Ban</h1>
+    
+    <div class="card">
+        <div class="input-group">
+            <label for="measurement">Nhập kích thước (đơn vị mm):</label>
+            <input type="number" id="measurement" placeholder="Nhập số đo...">
+        </div>
+        <button onclick="calculateLuban()">Tra cứu</button>
+        
+        <div class="result" id="result" style="display: none;">
+            <h2>Kết quả tra cứu:</h2>
+            
+            <div class="result-item">
+                <span class="result-label">Số đo nhập vào:</span>
+                <span class="result-value" id="original-value"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Số đo quy đổi:</span>
+                <span class="result-value" id="converted-value"></span>
+                <span class="note">(Lấy phần dư khi chia cho 463mm)</span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Thuộc cung:</span>
+                <span class="result-value highlight" id="cung-value"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Ý nghĩa:</span>
+                <span class="result-value" id="meaning-value"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Đánh giá:</span>
+                <span class="result-value" id="eval-value"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Kết luận:</span>
+                <span class="result-value highlight" id="conclusion"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card explanation">
+        <h3>Thước Lỗ Ban là gì?</h3>
+        <p>Thước Lỗ Ban (hay còn gọi là thước Lỗ Ban Tử Cấm Thành) là công cụ đo lường cổ xưa của Trung Quốc, được sử dụng trong xây dựng và phong thủy. Theo truyền thống, việc lựa chọn kích thước phù hợp cho các cấu trúc xây dựng và đồ nội thất sẽ mang lại may mắn và thịnh vượng.</p>
+        
+        <h3>Cách sử dụng</h3>
+        <p>Với những kích thước lớn hơn 463mm, công cụ sẽ tự động quy đổi về thang đo chuẩn theo công thức lấy phần dư khi chia cho 463mm.</p>
+        <p>Ví dụ: Với kích thước 2083mm (chiều cao trong ví dụ), số quy đổi sẽ là 2083 % 463 = 231mm, tương ứng với cung "Đại Cát".</p>
+        
+        <div class="note">
+            <p>Lưu ý: Kết quả tra cứu chỉ mang tính tham khảo, dựa trên dữ liệu thước Lỗ Ban truyền thống.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Dữ liệu thước Lỗ Ban (dựa theo file CSV)
+        const lubanData = [
+            {cung: "Tài Đức", lyGiai: "Có tài năng và đức hạnh", totXau: "Tốt (吉)", from: 0, to: 14.47},
+            {cung: "Bảo Khố", lyGiai: "Kho báu, giàu sang", totXau: "Tốt (吉)", from: 14.47, to: 28.94},
+            {cung: "Lục Hợp", lyGiai: "Sáu hướng hòa hợp, thuận lợi", totXau: "Tốt (吉)", from: 28.94, to: 43.41},
+            {cung: "Nghênh Phúc", lyGiai: "Đón nhận phúc lành", totXau: "Tốt (吉)", from: 43.41, to: 57.88},
+            {cung: "Thoái Tài", lyGiai: "Hao hụt tiền của", totXau: "Xấu (凶)", from: 57.88, to: 72.34},
+            {cung: "Công Sự", lyGiai: "Dính líu chuyện quan tụng", totXau: "Xấu (凶)", from: 72.34, to: 86.81},
+            {cung: "Lao Chấp", lyGiai: "Bị tù đày, giam cầm", totXau: "Xấu (凶)", from: 86.81, to: 101.28},
+            {cung: "Cô Quả", lyGiai: "Cô đơn, goá bụa", totXau: "Xấu (凶)", from: 101.28, to: 115.75},
+            {cung: "Trường Khố", lyGiai: "Nợ nần kéo dài", totXau: "Xấu (凶)", from: 115.75, to: 130.22},
+            {cung: "Kiếp Tài", lyGiai: "Bị cướp đoạt tài sản", totXau: "Xấu (凶)", from: 130.22, to: 144.69},
+            {cung: "Quan Quỷ", lyGiai: "Gặp rắc rối với quan phủ", totXau: "Xấu (凶)", from: 144.69, to: 159.16},
+            {cung: "Thất Thoát", lyGiai: "Mất mát, hao hụt", totXau: "Xấu (凶)", from: 159.16, to: 173.63},
+            {cung: "Thêm Đinh", lyGiai: "Thêm con trai, đông con", totXau: "Tốt (吉)", from: 173.63, to: 188.09},
+            {cung: "Ích Lợi", lyGiai: "Có lợi ích, sinh lời", totXau: "Tốt (吉)", from: 188.09, to: 202.56},
+            {cung: "Quý Tử", lyGiai: "Con cái hiển quý", totXau: "Tốt (吉)", from: 202.56, to: 217.03},
+            {cung: "Đại Cát", lyGiai: "May mắn lớn, phúc lộc dồi dào", totXau: "Tốt (吉)", from: 217.03, to: 231.50},
+            {cung: "Thuận Khoa", lyGiai: "Thi cử thuận lợi, công danh thành đạt", totXau: "Tốt (吉)", from: 231.50, to: 245.97},
+            {cung: "Hoành Tài", lyGiai: "Phát tài bất ngờ", totXau: "Tốt (吉)", from: 245.97, to: 260.44},
+            {cung: "Tiến Bảo", lyGiai: "Nhận được của quý, tài lộc", totXau: "Tốt (吉)", from: 260.44, to: 274.91},
+            {cung: "Đăng Khoa", lyGiai: "Đỗ đạt, thành danh", totXau: "Tốt (吉)", from: 274.91, to: 289.38},
+            {cung: "Kiếp Tài", lyGiai: "Mất tiền của do bị cướp", totXau: "Xấu (凶)", from: 289.38, to: 303.84},
+            {cung: "Tử Tuyệt", lyGiai: "Chết chóc, tuyệt hậu", totXau: "Xấu (凶)", from: 303.84, to: 318.31},
+            {cung: "Quan Quỷ", lyGiai: "Rắc rối quan sự", totXau: "Xấu (凶)", from: 318.31, to: 332.78},
+            {cung: "Thất Thoát", lyGiai: "Hao hụt tài sản", totXau: "Xấu (凶)", from: 332.78, to: 347.25},
+            {cung: "Thiên Tai", lyGiai: "Gặp tai họa từ trời", totXau: "Xấu (凶)", from: 347.25, to: 361.72},
+            {cung: "Bệnh Lâm", lyGiai: "Mắc bệnh nặng", totXau: "Xấu (凶)", from: 361.72, to: 376.19},
+            {cung: "Khẩu Thiệt", lyGiai: "Tranh cãi, thị phi", totXau: "Xấu (凶)", from: 376.19, to: 390.66},
+            {cung: "Tai Chí", lyGiai: "Tai ương ập đến", totXau: "Xấu (凶)", from: 390.66, to: 405.13},
+            {cung: "Thiên Đức", lyGiai: "Nhận ân đức từ trời", totXau: "Tốt (吉)", from: 405.13, to: 419.59},
+            {cung: "Hỷ Sự", lyGiai: "Gặp chuyện vui", totXau: "Tốt (吉)", from: 419.59, to: 434.06},
+            {cung: "Tiến Bảo", lyGiai: "Được của quý, tài lộc", totXau: "Tốt (吉)", from: 434.06, to: 448.53},
+            {cung: "Tài Vượng", lyGiai: "Tài lộc dồi dào", totXau: "Tốt (吉)", from: 448.53, to: 463.00}
+        ];
+        
+        // Hàm tra cứu thước Lỗ Ban
+        function findLubanRange(value) {
+            for (const range of lubanData) {
+                if (value >= range.from && value <= range.to) {
+                    return range;
+                }
+            }
+            return null;
+        }
+        
+        // Hàm tính toán và hiển thị kết quả
+        function calculateLuban() {
+            // Lấy giá trị nhập vào
+            const input = document.getElementById('measurement').value;
+            
+            if (!input || isNaN(input) || input <= 0) {
+                alert('Vui lòng nhập một số dương hợp lệ!');
+                return;
+            }
+            
+            // Tính số đo quy đổi (lấy phần dư khi chia cho 463)
+            const originalValue = parseFloat(input);
+            const convertedValue = originalValue % 463;
+            
+            // Tìm khoảng phù hợp
+            const result = findLubanRange(convertedValue);
+            
+            if (result) {
+                // Hiển thị kết quả
+                document.getElementById('original-value').textContent = originalValue.toFixed(2) + ' mm';
+                document.getElementById('converted-value').textContent = convertedValue.toFixed(2) + ' mm';
+                document.getElementById('cung-value').textContent = result.cung;
+                document.getElementById('meaning-value').textContent = result.lyGiai;
+                
+                const evalElement = document.getElementById('eval-value');
+                evalElement.textContent = result.totXau;
+                
+                // Đặt màu cho đánh giá tốt/xấu
+                if (result.totXau.includes('吉')) {
+                    evalElement.className = 'result-value good';
+                    document.getElementById('conclusion').textContent = 'Kích thước này thuộc cung tốt, phù hợp để sử dụng.';
+                    document.getElementById('conclusion').className = 'result-value good highlight';
+                } else {
+                    evalElement.className = 'result-value bad';
+                    document.getElementById('conclusion').textContent = 'Kích thước này thuộc cung xấu, nên tránh sử dụng.';
+                    document.getElementById('conclusion').className = 'result-value bad highlight';
+                }
+                
+                // Hiển thị kết quả
+                document.getElementById('result').style.display = 'block';
+            } else {
+                alert('Không tìm thấy kết quả phù hợp!');
+            }
+        }
+        
+        // Thêm sự kiện nhấn Enter để tra cứu
+        document.getElementById('measurement').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                calculateLuban();
+            }
+        });
+        
+        // Tự động điền ví dụ từ hình ảnh đã cung cấp
+        document.addEventListener('DOMContentLoaded', function() {
+            const exampleDiv = document.createElement('div');
+            exampleDiv.className = 'card';
+            exampleDiv.innerHTML = `
+                <h3>Ví dụ từ hình ảnh đã cung cấp:</h3>
+                <table>
+                    <tr>
+                        <th>Loại kích thước</th>
+                        <th>Số đo (mm)</th>
+                        <th>Thuộc cung</th>
+                        <th>Ý nghĩa</th>
+                        <th>Đánh giá</th>
+                    </tr>
+                    <tr>
+                        <td>Chiều Cao</td>
+                        <td>2083 mm</td>
+                        <td>Đại Cát</td>
+                        <td>May mắn lớn, phúc lộc dồi dào</td>
+                        <td class="good">Tốt (吉)</td>
+                    </tr>
+                    <tr>
+                        <td>Chiều Rộng</td>
+                        <td>681 mm</td>
+                        <td>Đại Cát</td>
+                        <td>May mắn lớn, phúc lộc dồi dào</td>
+                        <td class="good">Tốt (吉)</td>
+                    </tr>
+                </table>
+                <div class="note">
+                    <p>• Chiều cao 2083 mm → 2083 % 463 = 231 mm → thuộc cung Đại Cát</p>
+                    <p>• Chiều rộng 681 mm → 681 % 463 = 218 mm → thuộc cung Đại Cát</p>
+                </div>
+            `;
+            
+            // Chèn trước phần giải thích
+            const explanationDiv = document.querySelector('.explanation');
+            explanationDiv.parentNode.insertBefore(exampleDiv, explanationDiv);
+        });
+    </script>
+</body>
+</html>
