@@ -9,10 +9,10 @@
             font-family: 'Roboto', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
         }
         h1 {
             color: #2c3e50;
@@ -22,38 +22,54 @@
         .card {
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
         }
-        .input-group {
-            margin-bottom: 15px;
+        .form-group {
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
+            color: #444;
         }
-        input[type="number"] {
+        select, input[type="number"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
         }
         button {
             background-color: #2980b9;
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
         button:hover {
             background-color: #3498db;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
         }
         .result {
             margin-top: 30px;
@@ -61,27 +77,69 @@
         .result-item {
             margin-bottom: 10px;
         }
+        .result-section {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .result-section:last-child {
+            border-bottom: none;
+        }
         .result-label {
+            flex: 0 0 150px;
             font-weight: bold;
-            margin-right: 10px;
+            color: #444;
         }
         .result-value {
-            color: #2c3e50;
+            flex: 1;
         }
         .good {
             color: #27ae60;
+            font-weight: bold;
         }
         .bad {
             color: #c0392b;
+            font-weight: bold;
         }
         .highlight {
+            background-color: #fffde7;
+            padding: 2px 5px;
+            border-radius: 3px;
             font-weight: bold;
-            font-size: 1.1em;
+        }
+        .note {
+            font-style: italic;
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .secondary-result {
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f1f8ff;
+            border-radius: 4px;
+            border-left: 4px solid #4a90e2;
+        }
+        .explanation {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+        .alert {
+            padding: 10px 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin: 15px 0;
         }
         th, td {
             border: 1px solid #ddd;
@@ -90,85 +148,254 @@
         }
         th {
             background-color: #f2f2f2;
+            color: #333;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        .explanation {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #eef8ff;
-            border-radius: 4px;
-            font-size: 0.9em;
+        .formula {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #e83e8c;
         }
-        .note {
-            margin-top: 15px;
-            font-style: italic;
-            color: #666;
+        
+        /* Tab styling */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 8px 8px 0 0;
+        }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            width: auto;
+        }
+        .tab button:hover {
+            background-color: #ddd;
+            transform: none;
+        }
+        .tab button.active {
+            background-color: #2980b9;
+            color: white;
+        }
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            animation: fadeEffect 0.5s;
+            background-color: white;
+        }
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .result-section {
+                flex-direction: column;
+            }
+            .result-label {
+                margin-bottom: 5px;
+            }
+            .tab button {
+                width: 50%;
+                padding: 12px 5px;
+            }
         }
     </style>
 </head>
 <body>
     <h1>Ứng dụng Tra cứu Thước Lỗ Ban</h1>
     
-    <div class="card">
-        <div class="input-group">
-            <label for="measurement">Nhập kích thước (đơn vị mm):</label>
-            <input type="number" id="measurement" placeholder="Nhập số đo...">
+    <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'Tab1')">Tra cứu theo Kích thước</button>
+        <button class="tablinks" onclick="openTab(event, 'Tab2')">Tìm Kích thước theo Cung</button>
+    </div>
+    
+    <!-- Tab 1: Tra cứu theo Kích thước -->
+    <div id="Tab1" class="tabcontent" style="display: block;">
+        <div class="card">
+            <div class="alert" id="error-alert-1"></div>
+            
+            <div class="form-group">
+                <label for="measurement">Nhập kích thước (đơn vị mm):</label>
+                <input type="number" id="measurement" placeholder="Nhập số đo...">
+            </div>
+            <button onclick="calculateLuban()">Tra cứu</button>
+            
+            <div class="result" id="result" style="display: none;">
+                <h2>Kết quả tra cứu:</h2>
+                
+                <div class="result-item">
+                    <span class="result-label">Số đo nhập vào:</span>
+                    <span class="result-value" id="original-value"></span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Số đo quy đổi:</span>
+                    <span class="result-value" id="converted-value"></span>
+                    <span class="note">(Lấy phần dư khi chia cho 463mm)</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Thuộc cung:</span>
+                    <span class="result-value highlight" id="cung-value"></span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Ý nghĩa:</span>
+                    <span class="result-value" id="meaning-value"></span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Đánh giá:</span>
+                    <span class="result-value" id="eval-value"></span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Kết luận:</span>
+                    <span class="result-value highlight" id="conclusion"></span>
+                </div>
+            </div>
         </div>
-        <button onclick="calculateLuban()">Tra cứu</button>
         
-        <div class="result" id="result" style="display: none;">
-            <h2>Kết quả tra cứu:</h2>
+        <div class="card explanation">
+            <h3>Thước Lỗ Ban là gì?</h3>
+            <p>Thước Lỗ Ban (hay còn gọi là thước Lỗ Ban Tử Cấm Thành) là công cụ đo lường cổ xưa của Trung Quốc, được sử dụng trong xây dựng và phong thủy. Theo truyền thống, việc lựa chọn kích thước phù hợp cho các cấu trúc xây dựng và đồ nội thất sẽ mang lại may mắn và thịnh vượng.</p>
             
-            <div class="result-item">
-                <span class="result-label">Số đo nhập vào:</span>
-                <span class="result-value" id="original-value"></span>
-            </div>
+            <h3>Cách sử dụng</h3>
+            <p>Với những kích thước lớn hơn 463mm, công cụ sẽ tự động quy đổi về thang đo chuẩn theo công thức lấy phần dư khi chia cho 463mm.</p>
+            <p>Ví dụ: Với kích thước 2083mm (chiều cao), số quy đổi sẽ là 2083 % 463 = 231mm, tương ứng với cung "Đại Cát".</p>
             
-            <div class="result-item">
-                <span class="result-label">Số đo quy đổi:</span>
-                <span class="result-value" id="converted-value"></span>
-                <span class="note">(Lấy phần dư khi chia cho 463mm)</span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Thuộc cung:</span>
-                <span class="result-value highlight" id="cung-value"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Ý nghĩa:</span>
-                <span class="result-value" id="meaning-value"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Đánh giá:</span>
-                <span class="result-value" id="eval-value"></span>
-            </div>
-            
-            <div class="result-item">
-                <span class="result-label">Kết luận:</span>
-                <span class="result-value highlight" id="conclusion"></span>
+            <div class="note">
+                <p>Lưu ý: Kết quả tra cứu chỉ mang tính tham khảo, dựa trên dữ liệu thước Lỗ Ban truyền thống.</p>
             </div>
         </div>
     </div>
     
-    <div class="card explanation">
-        <h3>Thước Lỗ Ban là gì?</h3>
-        <p>Thước Lỗ Ban (hay còn gọi là thước Lỗ Ban Tử Cấm Thành) là công cụ đo lường cổ xưa của Trung Quốc, được sử dụng trong xây dựng và phong thủy. Theo truyền thống, việc lựa chọn kích thước phù hợp cho các cấu trúc xây dựng và đồ nội thất sẽ mang lại may mắn và thịnh vượng.</p>
+    <!-- Tab 2: Tìm Kích thước theo Cung -->
+    <div id="Tab2" class="tabcontent">
+        <div class="card">
+            <div class="alert" id="error-alert-2"></div>
+            
+            <div class="form-group">
+                <label for="cung-select">Chọn Cung mong muốn:</label>
+                <select id="cung-select">
+                    <option value="" disabled selected>-- Chọn Cung --</option>
+                    <!-- Sẽ được điền bằng JavaScript -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="desired-size">Nhập kích thước mong muốn (mm):</label>
+                <input type="number" id="desired-size" placeholder="Nhập kích thước..." min="1">
+            </div>
+            
+            <button onclick="findNearestSizes()">Tìm Kích Thước</button>
+            
+            <div class="result" id="result-2" style="display: none;">
+                <h2>Kết quả:</h2>
+                
+                <div class="result-section">
+                    <div class="result-label">Cung đã chọn:</div>
+                    <div class="result-value" id="selected-cung"></div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-label">Ý nghĩa:</div>
+                    <div class="result-value" id="meaning-value-2"></div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-label">Đánh giá:</div>
+                    <div class="result-value" id="eval-value-2"></div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-label">Kích thước mong muốn:</div>
+                    <div class="result-value">
+                        <span id="desired-value"></span> mm
+                    </div>
+                </div>
+                
+                <div class="secondary-result">
+                    <h3>Kích thước nhỏ hơn và gần nhất:</h3>
+                    <div class="result-section">
+                        <div class="result-label">Kích thước chính:</div>
+                        <div class="result-value">
+                            <span class="highlight" id="smaller-value"></span> mm
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Khoảng kích thước:</div>
+                        <div class="result-value" id="smaller-range"></div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Chênh lệch:</div>
+                        <div class="result-value" id="smaller-diff"></div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Công thức:</div>
+                        <div class="result-value" id="smaller-formula"></div>
+                    </div>
+                </div>
+                
+                <div class="secondary-result">
+                    <h3>Kích thước lớn hơn và gần nhất:</h3>
+                    <div class="result-section">
+                        <div class="result-label">Kích thước chính:</div>
+                        <div class="result-value">
+                            <span class="highlight" id="larger-value"></span> mm
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Khoảng kích thước:</div>
+                        <div class="result-value" id="larger-range"></div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Chênh lệch:</div>
+                        <div class="result-value" id="larger-diff"></div>
+                    </div>
+                    <div class="result-section">
+                        <div class="result-label">Công thức:</div>
+                        <div class="result-value" id="larger-formula"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <h3>Cách sử dụng</h3>
-        <p>Với những kích thước lớn hơn 463mm, công cụ sẽ tự động quy đổi về thang đo chuẩn theo công thức lấy phần dư khi chia cho 463mm.</p>
-        <p>Ví dụ: Với kích thước 2083mm (chiều cao trong ví dụ), số quy đổi sẽ là 2083 % 463 = 231mm, tương ứng với cung "Đại Cát".</p>
-        
-        <div class="note">
-            <p>Lưu ý: Kết quả tra cứu chỉ mang tính tham khảo, dựa trên dữ liệu thước Lỗ Ban truyền thống.</p>
+        <div class="card explanation">
+            <h3>Giải thích công thức tính:</h3>
+            <p>Để tìm kích thước cụ thể thuộc một cung nào đó trong thước Lỗ Ban, chúng ta sử dụng công thức:</p>
+            <p><span class="formula">Kích thước = n × 463 + k</span></p>
+            <p>Trong đó:</p>
+            <ul>
+                <li><span class="formula">n</span> là số nguyên không âm (0, 1, 2, 3...)</li>
+                <li><span class="formula">k</span> là số thuộc khoảng của cung đã chọn (mm)</li>
+                <li><span class="formula">463</span> là chu kỳ lặp lại của thước Lỗ Ban (mm)</li>
+            </ul>
+            
+            <p>Với mỗi cung, chúng ta chỉ quan tâm đến phần dư khi chia cho 463. Ví dụ, cung "Đại Cát" có khoảng từ 217.03 đến 231.50 mm.</p>
+            
+            <div class="note">
+                <p>Lưu ý: Kết quả tính toán chỉ mang tính tham khảo, dựa trên nguyên lý thước Lỗ Ban truyền thống.</p>
+            </div>
         </div>
     </div>
-    
-    <script>
-        // Dữ liệu thước Lỗ Ban (dựa theo file CSV)
+<script>
+        // Dữ liệu thước Lỗ Ban
         const lubanData = [
             {cung: "Tài Đức", lyGiai: "Có tài năng và đức hạnh", totXau: "Tốt (吉)", from: 0, to: 14.47},
             {cung: "Bảo Khố", lyGiai: "Kho báu, giàu sang", totXau: "Tốt (吉)", from: 14.47, to: 28.94},
@@ -204,7 +431,92 @@
             {cung: "Tài Vượng", lyGiai: "Tài lộc dồi dào", totXau: "Tốt (吉)", from: 448.53, to: 463.00}
         ];
         
-        // Hàm tra cứu thước Lỗ Ban
+        // Hàm xử lý tab
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Ẩn tất cả các nội dung tab
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            // Bỏ active khỏi tất cả các tab
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // Hiển thị tab hiện tại và đánh dấu là active
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        // Thiết lập danh sách các cung trong dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const cungSelect = document.getElementById('cung-select');
+            
+            // Thêm các tùy chọn từ dữ liệu
+            lubanData.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${item.cung} | ${item.lyGiai} | ${item.totXau}`;
+                cungSelect.appendChild(option);
+            });
+            
+            // Thêm sự kiện nhấn Enter cho các ô input
+            document.getElementById('measurement').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    calculateLuban();
+                }
+            });
+            
+            document.getElementById('desired-size').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    findNearestSizes();
+                }
+            });
+            
+            // Tự động hiển thị ví dụ cho Tab 1
+            const exampleDiv = document.createElement('div');
+            exampleDiv.className = 'card';
+            exampleDiv.innerHTML = `
+                <h3>Ví dụ:</h3>
+                <table>
+                    <tr>
+                        <th>Loại kích thước</th>
+                        <th>Số đo (mm)</th>
+                        <th>Thuộc cung</th>
+                        <th>Ý nghĩa</th>
+                        <th>Đánh giá</th>
+                    </tr>
+                    <tr>
+                        <td>Chiều Cao</td>
+                        <td>2083 mm</td>
+                        <td>Đại Cát</td>
+                        <td>May mắn lớn, phúc lộc dồi dào</td>
+                        <td class="good">Tốt (吉)</td>
+                    </tr>
+                    <tr>
+                        <td>Chiều Rộng</td>
+                        <td>681 mm</td>
+                        <td>Đại Cát</td>
+                        <td>May mắn lớn, phúc lộc dồi dào</td>
+                        <td class="good">Tốt (吉)</td>
+                    </tr>
+                </table>
+                <div class="note">
+                    <p>• Chiều cao 2083 mm → 2083 % 463 = 231 mm → thuộc cung Đại Cát</p>
+                    <p>• Chiều rộng 681 mm → 681 % 463 = 218 mm → thuộc cung Đại Cát</p>
+                </div>
+            `;
+            
+            // Chèn trước phần giải thích trong Tab 1
+            const explanationDiv = document.querySelector('#Tab1 .explanation');
+            explanationDiv.parentNode.insertBefore(exampleDiv, explanationDiv);
+        });
+        
+        // Tab 1: Hàm tra cứu thước Lỗ Ban
         function findLubanRange(value) {
             for (const range of lubanData) {
                 if (value >= range.from && value <= range.to) {
@@ -214,15 +526,19 @@
             return null;
         }
         
-        // Hàm tính toán và hiển thị kết quả
+        // Tab 1: Hàm tính toán và hiển thị kết quả
         function calculateLuban() {
             // Lấy giá trị nhập vào
             const input = document.getElementById('measurement').value;
             
             if (!input || isNaN(input) || input <= 0) {
-                alert('Vui lòng nhập một số dương hợp lệ!');
+                document.getElementById('error-alert-1').textContent = 'Vui lòng nhập một số dương hợp lệ!';
+                document.getElementById('error-alert-1').style.display = 'block';
                 return;
             }
+            
+            // Ẩn thông báo lỗi nếu có
+            document.getElementById('error-alert-1').style.display = 'none';
             
             // Tính số đo quy đổi (lấy phần dư khi chia cho 463)
             const originalValue = parseFloat(input);
@@ -259,52 +575,138 @@
             }
         }
         
-        // Thêm sự kiện nhấn Enter để tra cứu
-        document.getElementById('measurement').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                calculateLuban();
-            }
-        });
-        
-        // Tự động điền ví dụ từ hình ảnh đã cung cấp
-        document.addEventListener('DOMContentLoaded', function() {
-            const exampleDiv = document.createElement('div');
-            exampleDiv.className = 'card';
-            exampleDiv.innerHTML = `
-                <h3>Ví dụ từ hình ảnh đã cung cấp:</h3>
-                <table>
-                    <tr>
-                        <th>Loại kích thước</th>
-                        <th>Số đo (mm)</th>
-                        <th>Thuộc cung</th>
-                        <th>Ý nghĩa</th>
-                        <th>Đánh giá</th>
-                    </tr>
-                    <tr>
-                        <td>Chiều Cao</td>
-                        <td>2083 mm</td>
-                        <td>Đại Cát</td>
-                        <td>May mắn lớn, phúc lộc dồi dào</td>
-                        <td class="good">Tốt (吉)</td>
-                    </tr>
-                    <tr>
-                        <td>Chiều Rộng</td>
-                        <td>681 mm</td>
-                        <td>Đại Cát</td>
-                        <td>May mắn lớn, phúc lộc dồi dào</td>
-                        <td class="good">Tốt (吉)</td>
-                    </tr>
-                </table>
-                <div class="note">
-                    <p>• Chiều cao 2083 mm → 2083 % 463 = 231 mm → thuộc cung Đại Cát</p>
-                    <p>• Chiều rộng 681 mm → 681 % 463 = 218 mm → thuộc cung Đại Cát</p>
-                </div>
-            `;
+        // Tab 2: Hàm tìm kích thước gần nhất
+        function findNearestSizes() {
+            // Lấy dữ liệu từ form
+            const cungIndex = document.getElementById('cung-select').value;
+            const desiredSize = parseFloat(document.getElementById('desired-size').value);
             
-            // Chèn trước phần giải thích
-            const explanationDiv = document.querySelector('.explanation');
-            explanationDiv.parentNode.insertBefore(exampleDiv, explanationDiv);
-        });
+            // Kiểm tra dữ liệu đầu vào
+            const errorAlert = document.getElementById('error-alert-2');
+            if (cungIndex === "" || cungIndex === null) {
+                errorAlert.textContent = "Vui lòng chọn một cung!";
+                errorAlert.style.display = "block";
+                return;
+            }
+            
+            if (isNaN(desiredSize) || desiredSize <= 0) {
+                errorAlert.textContent = "Vui lòng nhập kích thước hợp lệ (số dương)!";
+                errorAlert.style.display = "block";
+                return;
+            }
+            
+            // Ẩn thông báo lỗi nếu có
+            errorAlert.style.display = "none";
+            
+            // Lấy thông tin cung đã chọn
+            const selectedCung = lubanData[cungIndex];
+            const rangeFrom = selectedCung.from;
+            const rangeTo = selectedCung.to;
+            const rangeMiddle = (rangeFrom + rangeTo) / 2;
+            
+            // Tính phần dư của kích thước mong muốn khi chia cho 463
+            const modulo = desiredSize % 463;
+            
+            // Tìm n gần nhất để tạo kích thước nhỏ hơn và lớn hơn
+            let smallerValue, largerValue;
+            let smallerN, largerN;
+            
+            // Nếu modulo nằm trong khoảng cung
+            if (modulo >= rangeFrom && modulo <= rangeTo) {
+                // Kích thước đã thuộc cung
+                smallerValue = desiredSize;
+                largerValue = desiredSize;
+                smallerN = Math.floor(desiredSize / 463);
+                largerN = smallerN;
+            } else {
+                // Tính giá trị n cho kích thước nhỏ hơn và lớn hơn
+                const baseN = Math.floor(desiredSize / 463);
+                
+                // Tính kích thước nhỏ hơn
+                if (modulo < rangeFrom) {
+                    // Cung nằm ở chu kỳ hiện tại nhưng phía sau modulo
+                    smallerN = baseN - 1;
+                    smallerValue = smallerN * 463 + rangeTo;
+                } else {
+                    // Cung nằm ở chu kỳ hiện tại nhưng phía trước modulo
+                    smallerN = baseN;
+                    smallerValue = smallerN * 463 + rangeTo;
+                }
+                
+                // Tính kích thước lớn hơn
+                if (modulo > rangeTo) {
+                    // Cung nằm ở chu kỳ tiếp theo
+                    largerN = baseN + 1;
+                    largerValue = largerN * 463 + rangeFrom;
+                } else {
+                    // Cung nằm ở chu kỳ hiện tại
+                    largerN = baseN;
+                    largerValue = largerN * 463 + rangeFrom;
+                }
+            }
+            
+            // Tính khoảng kích thước đầy đủ cho mỗi kết quả
+            const smallerRangeStart = smallerN * 463 + selectedCung.from;
+            const smallerRangeEnd = smallerN * 463 + selectedCung.to;
+            
+            const largerRangeStart = largerN * 463 + selectedCung.from;
+            const largerRangeEnd = largerN * 463 + selectedCung.to;
+            
+            // Hiển thị kết quả
+            document.getElementById('selected-cung').textContent = selectedCung.cung;
+            document.getElementById('meaning-value-2').textContent = selectedCung.lyGiai;
+            document.getElementById('eval-value-2').textContent = selectedCung.totXau;
+            document.getElementById('eval-value-2').className = selectedCung.totXau.includes('吉') ? 'result-value good' : 'result-value';
+            
+            document.getElementById('desired-value').textContent = desiredSize.toFixed(2);
+            
+            // Hiển thị kết quả nhỏ hơn
+            document.getElementById('smaller-value').textContent = smallerValue.toFixed(2);
+            document.getElementById('smaller-range').innerHTML = 
+                `<span class="highlight">${smallerRangeStart.toFixed(2)} - ${smallerRangeEnd.toFixed(2)}</span> mm <span class="note">(Chu kỳ thứ ${smallerN + 1})</span>`;
+            document.getElementById('smaller-diff').textContent = Math.abs(desiredSize - smallerValue).toFixed(2) + " mm";
+            document.getElementById('smaller-formula').innerHTML = 
+                `${smallerN} × 463 + ${selectedCung.to.toFixed(2)} = ${smallerValue.toFixed(2)} mm`;
+            
+            // Hiển thị kết quả lớn hơn
+            document.getElementById('larger-value').textContent = largerValue.toFixed(2);
+            document.getElementById('larger-range').innerHTML = 
+                `<span class="highlight">${largerRangeStart.toFixed(2)} - ${largerRangeEnd.toFixed(2)}</span> mm <span class="note">(Chu kỳ thứ ${largerN + 1})</span>`;
+            document.getElementById('larger-diff').textContent = Math.abs(largerValue - desiredSize).toFixed(2) + " mm";
+            document.getElementById('larger-formula').innerHTML = 
+                `${largerN} × 463 + ${selectedCung.from.toFixed(2)} = ${largerValue.toFixed(2)} mm`;
+            
+            // Hiển thị kết quả
+            document.getElementById('result-2').style.display = 'block';
+            
+            // Trường hợp đặc biệt khi kích thước đã nằm trong cung
+            if (smallerValue === largerValue) {
+                // Tính khoảng kích thước đầy đủ
+                const rangeStart = smallerN * 463 + selectedCung.from;
+                const rangeEnd = smallerN * 463 + selectedCung.to;
+                
+                document.getElementsByClassName('secondary-result')[0].innerHTML = 
+                    `<h3>Kích thước đã thuộc cung ${selectedCung.cung}!</h3>
+                     <p>Kích thước ${desiredSize.toFixed(2)} mm đã nằm trong khoảng của cung ${selectedCung.cung}.</p>
+                     <div class="result-section">
+                         <div class="result-label">Khoảng kích thước:</div>
+                         <div class="result-value">
+                             <span class="highlight">${rangeStart.toFixed(2)} - ${rangeEnd.toFixed(2)}</span> mm
+                             <span class="note">(Chu kỳ thứ ${smallerN + 1})</span>
+                         </div>
+                     </div>
+                     <div class="result-section">
+                         <div class="result-label">Công thức:</div>
+                         <div class="result-value">
+                             ${smallerN} × 463 + (${rangeFrom.toFixed(2)} - ${rangeTo.toFixed(2)}) = ${rangeStart.toFixed(2)} - ${rangeEnd.toFixed(2)} mm
+                         </div>
+                     </div>`;
+                
+                document.getElementsByClassName('secondary-result')[1].style.display = 'none';
+            } else {
+                document.getElementsByClassName('secondary-result')[1].style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
